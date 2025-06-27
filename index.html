@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Rolling Dice</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: #f0f0f0;
+            cursor: default;
+            user-select: none;
+            position: relative;
+        }
+
+        #dice {
+            position: absolute;
+            top: 32px;
+            right: 48px;
+            height: 300px;
+            width: 300px;
+            font-size: 20rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+            cursor: pointer;
+            perspective: 600px;
+            z-index: 10;
+            overflow: hidden;
+        }
+
+        #dice:active {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+        }
+
+        #number {
+            font-size: 32rem;
+            font-weight: bold;
+            font-family: cursive;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            user-select: none;
+            background: linear-gradient(270deg, #ff3cac, #784ba0, #2b86c5, #42e695, #ff3cac);
+            background-size: 1000% 1000%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientMove 2s linear infinite;
+        }
+
+        .rolling {
+            animation: roll3d 0.8s cubic-bezier(.68, -0.55, .27, 1.55);
+        }
+
+        @keyframes roll3d {
+            0% {
+                transform: rotateY(0deg) rotateX(0deg) scale(1);
+            }
+
+            20% {
+                transform: rotateY(90deg) rotateX(30deg) scale(1.2);
+            }
+
+            40% {
+                transform: rotateY(180deg) rotateX(60deg) scale(0.9);
+            }
+
+            60% {
+                transform: rotateY(270deg) rotateX(30deg) scale(1.1);
+            }
+
+            80% {
+                transform: rotateY(360deg) rotateX(0deg) scale(1);
+            }
+
+            100% {
+                transform: rotateY(360deg) rotateX(0deg) scale(1);
+            }
+        }
+
+        @keyframes gradientMove {
+            0% {
+                background-position: 0% 50%
+            }
+
+            50% {
+                background-position: 100% 50%
+            }
+
+            100% {
+                background-position: 0% 50%
+            }
+        }
+
+        /* Dice face colors */
+        .dice1 {
+            color: #e70b21;
+        }
+
+        .dice2 {
+            color: #430bde;
+        }
+
+        .dice3 {
+            color: #430bde;
+        }
+
+        .dice4 {
+            color: #04dd12;
+        }
+
+        .dice5 {
+            color: #430bde;
+        }
+
+        .dice6 {
+            color: #0ae648;
+        }
+
+        /* Rolling dice overlay animation */
+        #rolling-overlay {
+            position: absolute;
+            top: 32px;
+            right: 48px;
+            width: 300px;
+            height: 300px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        .show-rolling {
+            display: flex !important;
+        }
+
+        .rolling-dice-img {
+            width: 180px;
+            height: 180px;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg) scale(1);
+            }
+
+            50% {
+                transform: rotate(180deg) scale(1.2);
+            }
+
+            100% {
+                transform: rotate(360deg) scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="dice" class="dice"></div>
+    <div id="rolling-overlay">
+        <!-- You can use any animated dice GIF or SVG here. Below is a simple SVG dice illustration for demo. -->
+        <svg class="rolling-dice-img" viewBox="0 0 100 100">
+            <rect x="10" y="10" width="80" height="80" rx="20" fill="#fff" stroke="#888" stroke-width="4" />
+            <circle cx="50" cy="50" r="8" fill="#784ba0" />
+            <circle cx="30" cy="30" r="6" fill="#42e695" />
+            <circle cx="70" cy="70" r="6" fill="#ff3cac" />
+            <circle cx="30" cy="70" r="6" fill="#2b86c5" />
+            <circle cx="70" cy="30" r="6" fill="#ffdfba" />
+        </svg>
+    </div>
+    <div id="number">0</div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        const diceFaces = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
+        const diceColors = [
+            "dice1",
+            "dice2",
+            "dice3",
+            "dice4",
+            "dice5",
+            "dice6"
+        ];
+        $(document).on('click', function () {
+            $('#rolling-overlay').addClass('show-rolling');
+            $('#dice').css('visibility', 'hidden');
+            setTimeout(function () {
+                const roll = Math.floor(Math.random() * 6);
+                $('#dice')
+                    .removeClass('rolling dice1 dice2 dice3 dice4 dice5 dice6')
+                    .addClass(diceColors[roll])
+                    .html(diceFaces[roll]);
+                $('#number').text(roll + 1);
+                $('#rolling-overlay').removeClass('show-rolling');
+                $('#dice').css('visibility', 'visible');
+            }, 900);
+        });
+    </script>
+</body>
+
+</html>
